@@ -1,13 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import TodoTextInput from './TodoTextInput';
+import * as TodoActions from '../actions/TodoActions';
 
 export default class TodoItem extends Component {
   static propTypes = {
     todo: PropTypes.object.isRequired,
-    editTodo: PropTypes.func.isRequired,
-    deleteTodo: PropTypes.func.isRequired,
-    markTodo: PropTypes.func.isRequired
+    loggit: PropTypes.object.isRequired
   };
 
   constructor(props, context) {
@@ -21,17 +20,28 @@ export default class TodoItem extends Component {
     this.setState({ editing: true });
   }
 
+  handleMarkTodo() {
+    const {todo} = this.props;
+    this.props.loggit.recordFact(todo.id);
+  }
+
+  handleDestroyTodo() {
+    const {todo} = this.props;
+    this.props.loggit.recordFact(TodoActions.deleteTodo(todo.id));
+  }
+
+  // TODO(kr) Make this just record, interpet later?
   handleSave(id, text) {
     if (text.length === 0) {
-      this.props.deleteTodo(id);
+      this.props.loggit.recordFact(TodoActions.deleteTodo(id));
     } else {
-      this.props.editTodo(id, text);
+      this.props.loggit.recordFact(TodoActions.editTodo(id, text));
     }
     this.setState({ editing: false });
   }
 
   render() {
-    const {todo, markTodo, deleteTodo, editTodo} = this.props;
+    const {todo} = this.props;
 
     let element;
     if (this.state.editing) {
@@ -46,12 +56,12 @@ export default class TodoItem extends Component {
           <input className='toggle'
                  type='checkbox'
                  checked={todo.marked}
-                 onChange={() => markTodo(todo.id)} />
-          <label onDoubleClick={::this.handleDoubleClick}>
+                 onChange={this.handleMarkTodo.bind(this)} />
+          <label onDoubleClick={this.handleDoubleClick.bind(this)}>
             {todo.text}
           </label>
           <button className='destroy'
-                  onClick={() => deleteTodo(todo.id)} />
+                  onClick={this.handleDestroyTodo.bind(this)} />
         </div>
       );
     }

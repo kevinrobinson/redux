@@ -1,44 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Log from '../lib/log';
+import Optimizer from '../lib/optimizer';
 import TodoApp from './TodoApp';
-// import { createRedux, ReduxPropType } from 'redux';
-// import { Provider } from 'redux/react';
-// import * as stores from '../stores';
-
-
-
-// Redux must have final references
-// class ReduxProvider extends Component {
-//   static propTypes = {
-//     redux: ReduxPropType.isRequired
-//   }
-
-//   static childContextTypes = {
-//     redux: ReduxPropType.isRequired
-//   }
-
-//   constructor(props, context) {
-//     super(props, context);
-//   }
-
-//   getChildContext() {
-//     return { redux: this.props.redux };
-//   }
-
-//   render() {
-//     return this.props.children;
-//   }
-// }
 
 
 // Outermost layer
-export default class App {
-  componentDidMount() {
-    this.log = new Log();
+export default class App extends React.Component {
+  componentWillMount() {
+    const log = this.log = new Log({ onFact: this.onFact.bind(this) });
+    const optimizer = this.optimizer = new Optimizer(log);
     this.loggit = {
-      recordFact: ::log.recordFact
-      reduce: ::log.reduce
+      recordFact: log.recordFact.bind(log),
+      reduce: log.reduce.bind(log),
+      compute: optimizer.compute.bind(optimizer)
     }
+  }
+
+  // Starting super naive.
+  onFact(log, fact) {
+    console.log('fact', fact);
+    this.forceUpdate();
   }
 
   render() {

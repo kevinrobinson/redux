@@ -4,7 +4,6 @@ import { Connector } from 'redux/react';
 import Header from '../components/Header';
 import MainSection from '../components/MainSection';
 import * as TodoActions from '../actions/TodoActions';
-import ComputeTodos from '../stores/todos.js'
 
 export default class TodoApp {
   static propTypes = {
@@ -15,7 +14,7 @@ export default class TodoApp {
     return (
       <div>
         <Header loggit={this.props.loggit} />
-        <MainSection loggit={this.props.loggit />
+        <MainSection loggit={this.props.loggit} />
       </div>
     );
   }
