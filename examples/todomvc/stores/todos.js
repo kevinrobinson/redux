@@ -10,6 +10,8 @@ export default {
 
   reducer: function(todos, action) {
     switch (action.type) {
+    // TODO(kr) This case of generating a unique id is trickier.
+    // It really needs separate semantics, I think.
     case ADD_TODO:
       return [{
         id: (todos.length === 0) ? 0 : todos[0].id + 1,

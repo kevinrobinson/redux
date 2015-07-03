@@ -17,8 +17,7 @@ export default class App extends React.Component {
   }
 
   // Starting super naive.
-  onFact(log, fact) {
-    console.log('fact', fact);
+  onFact(log) {
     this.forceUpdate();
   }
 
