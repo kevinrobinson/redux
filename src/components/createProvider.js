@@ -29,8 +29,9 @@ export default function createProvider(React) {
       const { redux: nextRedux } = nextProps;
 
       if (redux !== nextRedux) {
-        const nextDispatcher = nextRedux.getDispatcher();
-        redux.replaceDispatcher(nextDispatcher);
+        throw new Error('todo');
+        // const nextDispatcher = nextRedux.getDispatcher();
+        // redux.replaceDispatcher(nextDispatcher);
       }
     }
 
