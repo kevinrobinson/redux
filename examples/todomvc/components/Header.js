@@ -1,15 +1,16 @@
 import React, { PropTypes } from 'react';
 import TodoTextInput from './TodoTextInput';
+import TodoActions from '../actions/TodoActions';
 
 export default class Header {
   static propTypes = {
-    addTodo: PropTypes.func.isRequired
+    recordFact: PropTypes.func.isRequired
   };
 
   handleSave(text) {
-    if (text.length !== 0) {
-      this.props.addTodo(text);
-    }
+    if (text.length === 0) return;
+    const fact = TodoActions.addTodo(text);
+    this.props.recordFact(fact);
   }
 
   render() {
