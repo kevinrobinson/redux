@@ -7,11 +7,15 @@ export default class TodoTextInput extends Component {
     text: PropTypes.string,
     placeholder: PropTypes.string,
     editing: PropTypes.bool,
-    newTodo: PropTypes.bool
+    isNewTodo: PropTypes.bool
   };
 
   constructor(props, context) {
     super(props, context);
+    this.defaultProps = {
+      isNewTodo: false,
+      editing: false
+    };
     this.state = {
       text: this.props.text || ''
     };
@@ -19,11 +23,11 @@ export default class TodoTextInput extends Component {
 
   handleSubmit(e) {
     const text = e.target.value.trim();
-    if (e.which === 13) {
-      this.props.onSave(text);
-      if (this.props.newTodo) {
-        this.setState({ text: '' });
-      }
+    if (e.which !== 13) return;
+
+    this.props.onSave(text);
+    if (this.props.isNewTodo) {
+      this.setState({ text: '' });
     }
   }
 
@@ -32,7 +36,7 @@ export default class TodoTextInput extends Component {
   }
 
   handleBlur(e) {
-    if (!this.props.newTodo) {
+    if (!this.props.isNewTodo) {
       this.props.onSave(e.target.value);
     }
   }
@@ -41,7 +45,7 @@ export default class TodoTextInput extends Component {
     return (
       <input className={classnames({
               edit: this.props.editing,
-              'new-todo': this.props.newTodo
+              'new-todo': this.props.isNewTodo
              })}
              type='text'
              placeholder={this.props.placeholder}
