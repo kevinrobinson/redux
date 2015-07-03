@@ -77,7 +77,7 @@ export default class MainSection extends Component {
         <input className='toggle-all'
                type='checkbox'
                checked={markedCount === todos.length}
-               onChange={this.handleInputChanged} />
+               onChange={this.handleInputChanged.bind(this)} />
       );
     }
   }

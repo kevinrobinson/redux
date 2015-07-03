@@ -1,6 +1,6 @@
 import React from 'react';
 import * as TodoActions from '../actions/TodoActions';
-import compactionKey from '../stores/compaction';
+import compactionKey from '../stores/compaction_fn';
 
 
 export default class Debugger extends React.Component {
@@ -42,7 +42,7 @@ export default class Debugger extends React.Component {
   }
 
   forceCompaction() {
-    //compactionKey
+    this.props.loggit.experimental.forceCompaction();
   }
 
   render() {

@@ -1,6 +1,8 @@
 import { ADD_TODO, DELETE_TODO, EDIT_TODO, MARK_TODO, MARK_ALL, CLEAR_MARKED } from '../actions/ActionTypes';
 
-// Returns a 'computation' object.
+// This maps facts -> compaction key.  It's semantics are coupled
+// to what facts mean and how they are used in the app.  This isn't
+// library code.
 export default function compactionKey(action) {
   switch (action.type) {
   case ADD_TODO:

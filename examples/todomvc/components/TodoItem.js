@@ -22,7 +22,7 @@ export default class TodoItem extends Component {
 
   handleMarkTodo() {
     const {todo} = this.props;
-    this.props.loggit.recordFact(todo.id);
+    this.props.loggit.recordFact(TodoActions.markTodo(todo.id));
   }
 
   handleDestroyTodo() {
