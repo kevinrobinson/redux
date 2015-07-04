@@ -12,9 +12,10 @@ const TODO_FILTERS = {
   [SHOW_MARKED]: todo => todo.marked
 };
 
-export default class MainSection extends Component {
+
+class MainSection extends Component {
   static propTypes = {
-    loggit: PropTypes.object.isRequired
+    todos: PropTypes.array.isRequired
   };
 
   constructor(props, context) {
@@ -23,7 +24,7 @@ export default class MainSection extends Component {
   }
 
   handleClearMarked() {
-    const { todos } = this.data();
+    const { todos } = this.props;
     const atLeastOneMarked = todos.some(todo => todo.marked);
     if (!atLeastOneMarked) return;
 
@@ -35,26 +36,16 @@ export default class MainSection extends Component {
   }
 
   handleInputChanged() {
-    const {todos} = this.data();
+    const {todos} = this.props;
     const fact = (todos.every(todo => todo.marked))
       ? TodoActions.uncheckAll()
       : TodoActions.checkAll();
     this.props.loggit.recordFact(fact);
   }
 
-  computations() {
-    return {
-      todos: ComputeTodos
-    }
-  }
-
-  data() {
-    return this.props.loggit.compute(this.computations());
-  }
-
   render() {
-    const { todos } = this.data();
-    const { filter } = this.state;
+    const {todos} = this.props;
+    const {filter} = this.state;
 
     const filteredTodos = todos.filter(TODO_FILTERS[filter]);
     const markedCount = todos.reduce((count, todo) =>
@@ -87,7 +78,7 @@ export default class MainSection extends Component {
   }
 
   renderFooter(markedCount) {
-    const { todos } = this.data();
+    const { todos } = this.props;
     const { filter } = this.state;
     const unmarkedCount = todos.length - markedCount;
 
@@ -102,3 +93,29 @@ export default class MainSection extends Component {
     }
   }
 }
+
+// export default class Computation {
+//   static wrap(childClass, computations) {
+//     return <Computation childClass={childClass} computations={computations} />;
+//   }
+
+//   static propTypes = {
+//     loggit: PropTypes.object.isRequired
+//     computations: PropTypes.object.isRequired
+//   };
+  
+//   data() {
+//     return this.props.loggit.compute(this.props.computations);
+//   }
+
+//   render() {
+//     const computedData = this.data();
+//     const otherProps 
+//     return <this.childClass {...computedData} />;
+//   }
+// }
+
+
+// Computation.wrap MainSection, {
+//   todos: ComputeTodos 
+// }
