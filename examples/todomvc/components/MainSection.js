@@ -35,7 +35,11 @@ export default class MainSection extends Component {
   }
 
   handleInputChanged() {
-    this.props.loggit.recordFact(TodoActions.markAll());
+    const {todos} = this.data();
+    const fact = (todos.every(todo => todo.marked))
+      ? TodoActions.uncheckAll()
+      : TodoActions.checkAll();
+    this.props.loggit.recordFact(fact);
   }
 
   computations() {

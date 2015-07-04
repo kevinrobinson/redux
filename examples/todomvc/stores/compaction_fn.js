@@ -1,4 +1,13 @@
-import { ADD_TODO, DELETE_TODO, EDIT_TODO, MARK_TODO, MARK_ALL, CLEAR_MARKED } from '../actions/ActionTypes';
+import {
+  ADD_TODO,
+  DELETE_TODO,
+  EDIT_TODO,
+  CHECK_TODO,
+  UNCHECK_TODO,
+  CHECK_ALL,
+  UNCHECK_ALL,
+  CLEAR_MARKED
+} from '../actions/ActionTypes';
 
 // This maps facts -> compaction key.  It's semantics are coupled
 // to what facts mean and how they are used in the app.  This isn't
@@ -14,11 +23,17 @@ export default function compactionKey(action) {
   case EDIT_TODO:
     return [EDIT_TODO, action.id];
 
-  case MARK_TODO:
-    return [MARK_TODO, action.id];
+  case UNCHECK_TODO:
+    return [UNCHECK_TODO, action.id];
 
-  case MARK_ALL:
-  return [MARK_ALL];
+  case CHECK_TODO:
+    return [CHECK_TODO, action.id];
+
+  case CHECK_ALL:
+    return [CHECK_ALL];
+
+  case UNCHECK_ALL:
+    return [UNCHECK_ALL];
 
   case CLEAR_MARKED:
     return [CLEAR_MARKED];

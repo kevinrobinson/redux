@@ -1,4 +1,13 @@
-import { ADD_TODO, DELETE_TODO, EDIT_TODO, MARK_TODO, MARK_ALL, CLEAR_MARKED } from '../actions/ActionTypes';
+import {
+  ADD_TODO,
+  DELETE_TODO,
+  EDIT_TODO,
+  CHECK_TODO,
+  UNCHECK_TODO,
+  CHECK_ALL,
+  UNCHECK_ALL,
+  CLEAR_MARKED
+} from '../actions/ActionTypes';
 
 // Returns a 'computation' object.
 export default {
@@ -31,18 +40,30 @@ export default {
           todo
       );
 
-    case MARK_TODO:
+    case CHECK_TODO:
       return todos.map(todo =>
         todo.id === action.id ?
-          { ...todo, marked: !todo.marked } :
+          { ...todo, marked: true } :
           todo
       );
 
-    case MARK_ALL:
-      const areAllMarked = todos.every(todo => todo.marked);
+    case UNCHECK_TODO:
+      return todos.map(todo =>
+        todo.id === action.id ?
+          { ...todo, marked: false } :
+          todo
+      );
+
+    case CHECK_ALL:
       return todos.map(todo => ({
         ...todo,
-        marked: !areAllMarked
+        marked: true
+      }));
+
+    case UNCHECK_ALL:
+      return todos.map(todo => ({
+        ...todo,
+        marked: false
       }));
 
     case CLEAR_MARKED:

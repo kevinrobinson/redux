@@ -22,7 +22,10 @@ export default class TodoItem extends Component {
 
   handleMarkTodo() {
     const {todo} = this.props;
-    this.props.loggit.recordFact(TodoActions.markTodo(todo.id));
+    const fact = (todo.marked)
+      ? TodoActions.uncheckTodo(todo.id)
+      : TodoActions.checkTodo(todo.id)
+    this.props.loggit.recordFact(fact);
   }
 
   handleDestroyTodo() {
@@ -30,13 +33,11 @@ export default class TodoItem extends Component {
     this.props.loggit.recordFact(TodoActions.deleteTodo(todo.id));
   }
 
-  // TODO(kr) Make this just record, interpet later?
   handleSave(id, text) {
-    if (text.length === 0) {
-      this.props.loggit.recordFact(TodoActions.deleteTodo(id));
-    } else {
-      this.props.loggit.recordFact(TodoActions.editTodo(id, text));
-    }
+    const fact = (text.length === 0)
+      ? TodoActions.deleteTodo(id)
+      : TodoActions.editTodo(id, text);
+    this.props.loggit.recordFact(fact);
     this.setState({ editing: false });
   }
 

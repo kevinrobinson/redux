@@ -10,29 +10,31 @@ export default class Debugger extends React.Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = { isZalgoAwake: false };
-    this.zalgoTimer = null;
+    this.state = { isMonkeyAwake: false };
+    this.MonkeyTimer = null;
+    this.pokeMonkey = this.pokeMonkey.bind(this);
   }
 
-  handleZalgo() {
-    this.setState({ isZalgoAwake: !this.state.isZalgoAwake });
+  handleMonkey() {
+    this.setState({ isMonkeyAwake: !this.state.isMonkeyAwake });
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.isZalgoAwake === this.state.isZalgoAwake) {
+    if (prevState.isMonkeyAwake === this.state.isMonkeyAwake) {
       return;
     }
 
-    if (this.state.isZalgoAwake) {
-      this.zalgoTimer = window.setInterval(this.pokeZalgo.bind(this), 5);
+    if (this.state.isMonkeyAwake) {
+      this.MonkeyTimer = window.setInterval(this.pokeMonkey, 5);
     } else {
-      window.clearInterval(this.zalgoTimer);
+      window.clearInterval(this.MonkeyTimer);
     }
   }
 
-  pokeZalgo() {
+  pokeMonkey() {
     const actionFns = [
-      TodoActions.markAll,
+      TodoActions.checkAll,
+      TodoActions.uncheckAll,
       TodoActions.clearMarked,
       () => TodoActions.addTodo('do something: ' + Math.random())
     ]
@@ -49,12 +51,12 @@ export default class Debugger extends React.Component {
     return (
       <div style={{marginTop: 50}}>
         <button
-          onClick={this.handleZalgo.bind(this)}
+          onClick={this.handleMonkey.bind(this)}
           style={{
             border: '2px solid red',
             padding: 10,
-            backgroundColor: this.state.isZalgoAwake ? 'red' : 'white'
-          }}>zalgo</button>
+            backgroundColor: this.state.isMonkeyAwake ? 'red' : 'white'
+          }}>Monkey</button>
         <button
           onClick={this.forceCompaction.bind(this)}
           style={{

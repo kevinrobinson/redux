@@ -22,16 +22,29 @@ export function editTodo(id, text) {
   };
 }
 
-export function markTodo(id) {
+export function checkTodo(id) {
   return {
-    type: types.MARK_TODO,
+    type: types.CHECK_TODO,
     id
   };
 }
 
-export function markAll() {
+export function uncheckTodo(id) {
   return {
-    type: types.MARK_ALL
+    type: types.UNCHECK_TODO,
+    id
+  };
+}
+
+export function checkAll() {
+  return {
+    type: types.CHECK_ALL
+  };
+}
+
+export function uncheckAll() {
+  return {
+    type: types.UNCHECK_ALL
   };
 }
 
