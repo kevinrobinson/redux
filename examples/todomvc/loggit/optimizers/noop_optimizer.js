@@ -1,4 +1,4 @@
-import RenderTimer from './render_timer';
+import Timer from '../timer';
 
 // Just a placeholder with profiling, does no actual optimizations.
 export default class NoopOptimizer {
@@ -7,7 +7,7 @@ export default class NoopOptimizer {
     this._timeInCompute = 0;
     this._calls = 0;
     
-    this._renderTimer = new RenderTimer('NoopOptimizer', {
+    this.timer = new Timer('NoopOptimizer.compute', {
       logFn: this.logMsg.bind(this)
     });
   }
@@ -17,7 +17,7 @@ export default class NoopOptimizer {
   }
 
   compute(computations) {
-    return this._renderTimer.time(() => {
+    return this.timer.time(() => {
       return Object.keys(computations).reduce((slots, key) => {
         slots[key] = this.reduce(this.log, computations[key]);
         return slots;

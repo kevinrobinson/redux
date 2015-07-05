@@ -1,23 +1,17 @@
 import React from 'react';
 import LoggitShell from './loggit/shell';
-import 'todomvc-app-css/index.css';
+import ProfilingReporter from './loggit/profiling_reporter'
 import initialFacts from './test/initial_facts_set1';
+import TodoApp from './components/TodoApp';
+
 
 // Entry point
 const el = document.getElementById('root');
-const loggitShell = new LoggitShell(el, {initialFacts});
+const loggitShell = new LoggitShell(TodoApp, el, {initialFacts});
 loggitShell.start();
 
-// For debugging
+
+// For debugging and profiling
 window.React = React;
 window.loggitShell = loggitShell;
-window.optimizerStats = () => {
-  const calls = (loggitShell.optimizer._hitCount + loggitShell.optimizer._missCount);
-  const percentHits = Math.round(100 * loggitShell.optimizer._hitCount / calls);
-  return [
-    percentHits,
-    calls,
-    Math.round(loggitShell.optimizer._renderTimer.totalTime),
-    loggitShell.optimizer
-  ];
-}
+window.profilingReporter = new ProfilingReporter(loggitShell);

@@ -1,13 +1,22 @@
 import React from 'react';
-import TodoApp from '../components/TodoApp';
+import Timer from '../timer';
 
 
 // Batches with RAF, no shouldComponentUpdate optimizations.
 export default class RafReactRenderer {
-  constructor(el, loggit) {
+  constructor(reactClass, el, loggit) {
+    this.reactClass = reactClass;
     this.el = el;
     this.loggit = loggit;
     this._loop = this._loop.bind(this);
+
+    this.timer = new Timer('NaiveReactRenderer.render', {
+      logFn: this.logMsg.bind(this)
+    });
+  }
+
+  logMsg(...params) {
+    // console.log(...params);
   }
 
   start() {
@@ -30,7 +39,7 @@ export default class RafReactRenderer {
     if (this._wasDestroyed) return;
     if (this._isDirty) {
       this._renderCount++;
-      console.log('RafReactRenderer#render', this._renderCount);
+      this.logMsg('RafReactRenderer#render', this._renderCount);
       this._render();
       this._isDirty = false;
     }
@@ -39,9 +48,11 @@ export default class RafReactRenderer {
   }
 
   _render() {
-    React.render(
-      <TodoApp loggit={this.loggit} />,
-      this.el
-    );
+    this.timer.time(() => {
+      React.render(
+        <this.reactClass loggit={this.loggit} />,
+        this.el
+      );
+    });
   }
 }

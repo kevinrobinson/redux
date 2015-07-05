@@ -23,7 +23,7 @@ export default class Debugger extends React.Component {
       this.setState({ isMonkeyAwake: false });
       const after = this.profileSnapshot();
       this.outputProfiling(before, after);
-    }, 300);
+    }, 3000);
   }
 
   profileSnapshot() {
@@ -39,7 +39,7 @@ export default class Debugger extends React.Component {
     //   { heap: '+' + (after.heap - before.heap) }
     // ]);
     console.info({ heap: after.heap, delta: '+' + (after.heap - before.heap) });
-    console.info(window.optimizerStats());
+    console.info(window.profilingReporter.printStats());
   }
 
   handleMonkey() {
@@ -52,7 +52,7 @@ export default class Debugger extends React.Component {
     }
 
     if (this.state.isMonkeyAwake) {
-      this.MonkeyTimer = window.setInterval(this.pokeMonkey, 2);
+      this.MonkeyTimer = window.setInterval(this.pokeMonkey, 10);
     } else {
       window.clearInterval(this.MonkeyTimer);
     }

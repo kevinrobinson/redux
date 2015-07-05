@@ -1,35 +1,7 @@
 import React from 'react';
-import TodoApp from '../components/TodoApp';
 import _ from 'lodash';
+import ReactInterpreter from '../react_interpreter'
 
-// reaching into React's internals here
-const ReactInterpreter = {
-  nodeId: (component) => {
-    return component._reactInternalInstance._rootNodeID;
-  },
-
-  childComponents: (component) => {
-    // Not sure what this wrapping is about, seems dicey
-    const renderedComponent = component._reactInternalInstance._renderedComponent._renderedComponent || component._reactInternalInstance._renderedComponent;    
-    if (!renderedComponent) {
-      console.warn(component);
-    }
-    const renderedChildren = renderedComponent._renderedChildren || {};
-    if (!renderedChildren) {
-      console.warn(component);
-    }
-
-    // some internal DOM components (eg, ReactDOMTextComponent) don't have
-    // this property, since we're at the bottom layer bridging to the native
-    // system
-    return _.compact(_.pluck(_.values(renderedChildren), '_instance'));
-  },
-
-  // part of the loggit API
-  computations: (component) => {
-    return (component.computations) ? component.computations() : {};
-  }
-};
 
 // This batches with RAF, but also precomputes values for `compute`
 // before calling `render` in the next animation frame.
@@ -39,10 +11,11 @@ const ReactInterpreter = {
 // that can be precomputed before render, so that the hot path in render can stay
 // synchronous and fast.
 export default class PrecomputeReactRenderer {
-  constructor(el, loggit, options = {}) {
-    this.options = options;
+  constructor(reactClass, el, loggit, options = {}) {
+    this.reactClass = reactClass;
     this.el = el;
     this.loggit = loggit;
+    this.options = options;
     this.optimizer = options.optimizer;
 
     this._loop = this._loop.bind(this);
@@ -102,7 +75,7 @@ export default class PrecomputeReactRenderer {
 
     // discover what parts of the tree need to be rendered.
     const dirtyComponents = this._findDirtyComponents(this._rootComponent);
-    console.info('dirtyComponents:', dirtyComponents);
+    // console.info('PrecomputeReactRenderer:dirtyComponents:', dirtyComponents);
 
     // do something about it to update components.
     // could use heuristics here to batch further.
@@ -111,7 +84,7 @@ export default class PrecomputeReactRenderer {
     // step, where we essentially want to short-circuit like `shouldComponentUpdate`.
     // could work by setState into each component, might be straightforward.
     dirtyComponents.forEach((dirtyComponent) => {
-      this.logMsg('forceUpdate', dirtyComponent);
+      this.logMsg('PrecomputeReactRenderer:forceUpdate', dirtyComponent);
       dirtyComponent.forceUpdate();
     });
   }
@@ -121,7 +94,7 @@ export default class PrecomputeReactRenderer {
   // subsequent passes.
   _initialRender() {
     this._rootComponent = React.render(
-      <TodoApp loggit={this.loggit} />,
+      <this.reactClass loggit={this.loggit} />,
       this.el
     );
   }

@@ -1,4 +1,4 @@
-import RenderTimer from './render_timer';
+import Timer from '../timer';
 
 // Maintains a cache of calls, for repeats calls to the same fn
 // with the same set of facts.
@@ -17,8 +17,7 @@ export default class MemoizingOptimizerV2 {
 
     this._hitCount = 0;
     this._missCount = 0;
-    this._timeInCompute = 0;
-    this._renderTimer = new RenderTimer('MemoizingOptimizerV2', {
+    this.timer = new Timer('MemoizingOptimizerV2.compute', {
       logFn: this.logMsg.bind(this)
     });
   }
@@ -28,7 +27,7 @@ export default class MemoizingOptimizerV2 {
   }
 
   compute(computations) {
-    return this._renderTimer.time(() => {
+    return this.timer.time(() => {
       return Object.keys(computations).reduce((slots, key) => {
         slots[key] = this.reduce(this.log, computations[key]);
         return slots;

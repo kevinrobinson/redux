@@ -1,5 +1,5 @@
-
-export default class RenderTimer {
+// For timing blocks of code
+export default class Timer {
   constructor(timerName, options = {}) {
     this.timerName = timerName;
     this.options = options;

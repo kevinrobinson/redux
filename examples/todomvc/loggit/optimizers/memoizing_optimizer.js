@@ -1,3 +1,6 @@
+import Timer from '../timer';
+
+
 // Maintains a cache of calls, for repeats calls to the same fn
 // with the same set of facts.
 export default class MemoizingOptimizer {
@@ -14,7 +17,9 @@ export default class MemoizingOptimizer {
 
     this._hitCount = 0;
     this._missCount = 0;
-    this._timeInCompute = 0;
+    this.timer = new Timer('MemoizingOptimizer.compute', {
+      logFn: this.logMsg.bind(this)
+    });
   }
 
   logMsg(...params) {
@@ -22,16 +27,12 @@ export default class MemoizingOptimizer {
   }
 
   compute(computations) {
-    this.logMsg('MemoizingOptimizer#compute:', computations);
-    const before = performance.now();
-    const computedValue = Object.keys(computations).reduce((slots, key) => {
-      slots[key] = this.reduce(this.log, computations[key]);
-      return slots;
-    }, {});
-    const after = performance.now();
-    this._timeInCompute = this._timeInCompute + (after - before);
-    this.logMsg('MemoizingOptimizer.timeInCompute:', this._timeInCompute);
-    return computedValue;
+    return this.timer.time(() => {
+      return Object.keys(computations).reduce((slots, key) => {
+        slots[key] = this.reduce(this.log, computations[key]);
+        return slots;
+      }, {});
+    });
   }
 
   // This conflicts a bit with compaction, since if the length
