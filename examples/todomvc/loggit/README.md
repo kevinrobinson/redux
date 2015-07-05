@@ -50,6 +50,8 @@ Test2:
 This is the same as Test1, but swaps in PrecomputeReactRenderer.  I re-ran the
 other tests to make sure I didn't regress previous behavior, since quite a bit changed.
 
+Results are here:
+https://docs.google.com/spreadsheets/d/1_j-exUs3XjqjXh4Xa4D7nDspH5vaRlj9_dEKmB7iGCM/edit#gid=0
 
 output format: [
   renderer:
