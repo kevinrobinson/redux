@@ -20,10 +20,6 @@ export default class TodoItem extends Component {
     }
   }
 
-  data() {
-    return this.props.loggit.compute(this.computations());
-  }
-
   handleDoubleClick() {
     const {todo} = this.props;
     this.props.loggit.recordFact(TodoActions.willEditTodo(todo.id));
@@ -54,7 +50,7 @@ export default class TodoItem extends Component {
 
   render() {
     const {todo} = this.props;
-    const isEditing = this.data().isEditingMap[todo.id];
+    const isEditing = this.props.loggit.computeFor(this).isEditingMap[todo.id];
 
     let element;
     if (isEditing) {

@@ -1,3 +1,5 @@
+import RenderTimer from './render_timer';
+
 // Maintains a cache of calls, for repeats calls to the same fn
 // with the same set of facts.
 //
@@ -26,6 +28,10 @@ export default class MemoizingSnapshotOptimizer {
     this._hitCount = 0;
     this._missCount = 0;
     this._timeInCompute = 0;
+
+    this._renderTimer = new RenderTimer('MemoizingSnapshotOptimizer', {
+      logFn: this.logMsg.bind(this)
+    });
   }
 
   logMsg(...params) {
@@ -33,16 +39,12 @@ export default class MemoizingSnapshotOptimizer {
   }
 
   compute(computations) {
-    this.logMsg('MemoizingSnapshotOptimizer#compute:', computations);
-    const before = performance.now();
-    const computedValue = Object.keys(computations).reduce((slots, key) => {
-      slots[key] = this.reduce(this.log, computations[key]);
-      return slots;
-    }, {});
-    const after = performance.now();
-    this._timeInCompute = this._timeInCompute + (after - before);
-    this.logMsg('MemoizingSnapshotOptimizer.timeInCompute:', this._timeInCompute);
-    return computedValue;
+    return this._renderTimer.time(() => {
+      return Object.keys(computations).reduce((slots, key) => {
+        slots[key] = this.reduce(this.log, computations[key]);
+        return slots;
+      }, {});
+    });
   }
 
   memoizationCacheKey(log, computation) {

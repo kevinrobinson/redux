@@ -1,13 +1,16 @@
 import Log from './log';
+
 import NoopOptimizer from './noop_optimizer';
 import MemoizingOptimizer from './memoizing_optimizer';
 import MemoizingOptimizerV2 from './memoizing_optimizer_v2';
 import MemoizingSnapshotOptimizer from './memoizing_snapshot_optimizer';
+
 import NaiveReactRenderer from './naive_react_renderer';
 import RafReactRenderer from './raf_react_renderer';
+import PrecomputeReactRenderer from './precompute_react_renderer';
+
 import Compactor from './compactor';
 import compactionFn from '../stores/compaction_fn'
-
 
 // Outermost layer
 export default class Shell {
@@ -20,8 +23,29 @@ export default class Shell {
       initialFacts: options.initialFacts || []
     });
     this.optimizer = new MemoizingSnapshotOptimizer(this.log);
-    this.loggit = this._createLoggitApi(this.log, this.optimizer);    
-    this.renderer = new RafReactRenderer(this.el, this.loggit);
+    this.initForPrecomputeRenderer(this.log);
+  }
+
+  // This requires cooperation between the optimizer and the renderer,
+  // so we create a loggit API that allows that.
+  // It also breaks the loggit.compute method to take a component instead
+  // of just a description of computation.
+  initForPrecomputeRenderer(log) {    
+    this.loggit = {
+      recordFact: log.recordFact.bind(log),
+      computeFor: this._computeForWrapper.bind(this),
+      experimental: {
+        forceCompaction: this._experimentalCompaction.bind(this)
+      }
+    };
+    this.renderer = new PrecomputeReactRenderer(this.el, this.loggit, { optimizer: this.optimizer });
+  }
+
+  _computeForWrapper(component) {
+    const computations = (component.computations) ? component.computations() : {};
+    const computedValues = this.optimizer.compute(computations);
+    this.renderer.notifyAboutCompute(component, computations, computedValues);
+    return computedValues;
   }
 
   // public

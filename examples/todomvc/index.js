@@ -9,6 +9,7 @@ const loggitShell = new LoggitShell(el, {initialFacts});
 loggitShell.start();
 
 // For debugging
+window.React = React;
 window.loggitShell = loggitShell;
 window.optimizerStats = () => {
   const calls = (loggitShell.optimizer._hitCount + loggitShell.optimizer._missCount);
@@ -16,7 +17,7 @@ window.optimizerStats = () => {
   return [
     percentHits,
     calls,
-    Math.round(loggitShell.optimizer._timeInCompute),
+    Math.round(loggitShell.optimizer._renderTimer.totalTime),
     loggitShell.optimizer
   ];
 }

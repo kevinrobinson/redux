@@ -49,7 +49,7 @@ export default class MainSection extends Component {
   }
 
   data() {
-    return this.props.loggit.compute(this.computations());
+    return this.props.loggit.computeFor(this);
   }
 
   render() {

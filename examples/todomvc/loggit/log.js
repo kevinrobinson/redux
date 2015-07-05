@@ -8,6 +8,10 @@ export default class Log {
     this.offset = this.facts.length;
   }
 
+  logMsg(...params) {
+    // console.log(...params);
+  }
+  
   recordFact(fact) {
     if (!fact.type) {
       console.warn('Log#recordFact missing fact.type: ', fact);
@@ -27,7 +31,7 @@ export default class Log {
   }
 
   _persistStampedFact(stampedFact) {
-    console.log('Log#_persistStampedFact', this.facts.length, stampedFact);
+    this.logMsg('Log#_persistStampedFact', this.facts.length, stampedFact);
     this.facts = this.facts.concat(stampedFact);
     if (this.options.onFact) {
       this.options.onFact(this);
@@ -40,7 +44,7 @@ export default class Log {
   // data changing.
   // this keeps the shape of the data the same.
   reduceComputation(computation) {
-    console.log('Log#reduce:', computation);
+    this.logMsg('Log#reduce:', computation);
     return (this.facts.length === 0)
      ? computation.initial
      : this.facts.reduce(computation.reducer, computation.initial)

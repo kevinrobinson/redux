@@ -1,3 +1,5 @@
+import RenderTimer from './render_timer';
+
 // Maintains a cache of calls, for repeats calls to the same fn
 // with the same set of facts.
 // This is attempting to optimize the way the cache actual works but doesn't
@@ -16,6 +18,9 @@ export default class MemoizingOptimizerV2 {
     this._hitCount = 0;
     this._missCount = 0;
     this._timeInCompute = 0;
+    this._renderTimer = new RenderTimer('MemoizingOptimizerV2', {
+      logFn: this.logMsg.bind(this)
+    });
   }
 
   logMsg(...params) {
@@ -23,16 +28,12 @@ export default class MemoizingOptimizerV2 {
   }
 
   compute(computations) {
-    this.logMsg('MemoizingOptimizerV2#compute:', computations);
-    const before = performance.now();
-    const computedValue = Object.keys(computations).reduce((slots, key) => {
-      slots[key] = this.reduce(this.log, computations[key]);
-      return slots;
-    }, {});
-    const after = performance.now();
-    this._timeInCompute = this._timeInCompute + (after - before);
-    this.logMsg('MemoizingOptimizerV2.timeInCompute:', this._timeInCompute);
-    return computedValue;
+    return this._renderTimer.time(() => {
+      return Object.keys(computations).reduce((slots, key) => {
+        slots[key] = this.reduce(this.log, computations[key]);
+        return slots;
+      }, {});
+    });
   }
 
   // This conflicts a bit with compaction, since if the log length
