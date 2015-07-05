@@ -6,6 +6,9 @@
     "node": true
   },
   "rules": {
+    "no-console": 1,
+    "key-spacing": 0,
+    "comma-spacing": 0,
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
     "react/react-in-jsx-scope": 2,

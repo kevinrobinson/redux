@@ -1,7 +1,7 @@
 {
   "name": "redux",
-  "version": "0.12.0",
-  "description": "Atomic Flux with hot reloading",
+  "version": "0.13.1",
+  "description": "Atomic Flux with hot reloading (patched for profiling)",
   "main": "lib/index.js",
   "scripts": {
     "browser": "scripts/browser",

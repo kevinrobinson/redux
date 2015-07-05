@@ -1,6 +1,7 @@
 import createDispatcher from './createDispatcher';
 import composeStores from './utils/composeStores';
 import thunkMiddleware from './middleware/thunk';
+import ProfilingReporter from './utils/ProfilingReporter';
 
 export default class Redux {
   constructor(dispatcherOrStores, initialState) {
@@ -25,6 +26,8 @@ export default class Redux {
   replaceDispatcher(nextDispatcher) {
     this.dispatcher = nextDispatcher;
     this.dispatchFn = nextDispatcher(this.state, ::this.setState);
+    const {renderTimer, computeTimer} = this.dispatchFn.timers;
+    this.profilingReporter = new ProfilingReporter(renderTimer, computeTimer);
   }
 
   dispatch(action) {
@@ -33,6 +36,10 @@ export default class Redux {
 
   getState() {
     return this.state;
+  }
+
+  getProfilingReporter() {
+    return this.profilingReporter;
   }
 
   setState(nextState) {

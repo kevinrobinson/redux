@@ -1,4 +1,5 @@
 import composeMiddleware from './utils/composeMiddleware';
+import Timer from './utils/Timer';
 
 const INIT_ACTION = {
   type: '@@INIT'
@@ -7,9 +8,16 @@ const INIT_ACTION = {
 export default function createDispatcher(store, middlewares = []) {
   return function dispatcher(initialState, setState) {
     let state = setState(store(initialState, INIT_ACTION));
+    const computeTimer = new Timer('compute');
+    const renderTimer = new Timer('render');
 
     function dispatch(action) {
-      state = setState(store(state, action));
+      // compute
+      const newState = computeTimer.time(() => store(state, action));
+
+      // render
+      renderTimer.time(() => state = setState(newState));
+
       return action;
     }
 
@@ -21,6 +29,8 @@ export default function createDispatcher(store, middlewares = []) {
       middlewares(getState) :
       middlewares;
 
-    return composeMiddleware(...finalMiddlewares, dispatch);
+    let wrappedDispatchFn = composeMiddleware(...finalMiddlewares, dispatch);
+    wrappedDispatchFn.timers = {computeTimer, renderTimer};
+    return wrappedDispatchFn;
   };
 }

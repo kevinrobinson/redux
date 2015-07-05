@@ -8,6 +8,7 @@ export default function createRedux(...args) {
     dispatch: ::redux.dispatch,
     getState: ::redux.getState,
     getDispatcher: ::redux.getDispatcher,
-    replaceDispatcher: ::redux.replaceDispatcher
+    replaceDispatcher: ::redux.replaceDispatcher,
+    getProfilingReporter: ::redux.getProfilingReporter
   };
 }
