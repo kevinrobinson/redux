@@ -2,7 +2,7 @@ import React from 'react';
 import * as TodoActions from '../actions/TodoActions';
 import compactionKey from '../stores/compaction_fn';
 
-
+// For hacking on internals
 export default class Debugger extends React.Component {
   static propTypes = {
     loggit: React.PropTypes.object.isRequired

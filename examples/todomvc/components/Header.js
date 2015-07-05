@@ -17,8 +17,8 @@ export default class Header {
     return (
       <header className='header'>
           <h1>todos</h1>
-          <TodoTextInput newTodo={true}
-                         onSave={::this.handleSave}
+          <TodoTextInput isNewTodo={true}
+                         onSave={this.handleSave.bind(this)}
                          placeholder='What needs to be done?' />
       </header>
     );

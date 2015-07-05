@@ -1,7 +1,7 @@
 import {
-  ADD_TODO,
-  DELETE_TODO,
-  EDIT_TODO,
+  ADDED_TODO,
+  DELETED_TODO,
+  EDITED_TODO,
   CHECK_TODO,
   UNCHECK_TODO,
   CHECK_ALL,
@@ -9,7 +9,7 @@ import {
   CLEAR_MARKED
 } from '../actions/ActionTypes';
 
-// Returns a 'computation' object.
+// Returns a computation that returns the current list of todos.
 export default {
   initial: [{
     text: 'Learn more',
@@ -21,19 +21,19 @@ export default {
     switch (action.type) {
     // TODO(kr) This case of generating a unique id is trickier.
     // It really needs separate semantics, I think.
-    case ADD_TODO:
+    case ADDED_TODO:
       return [{
         id: (todos.length === 0) ? 0 : todos[0].id + 1,
         marked: false,
         text: action.text
       }, ...todos];
 
-    case DELETE_TODO:
+    case DELETED_TODO:
       return todos.filter(todo =>
         todo.id !== action.id
       );
 
-    case EDIT_TODO:
+    case EDITED_TODO:
       return todos.map(todo =>
         todo.id === action.id ?
           { ...todo, text: action.text } :

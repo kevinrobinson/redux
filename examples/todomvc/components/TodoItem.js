@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import TodoTextInput from './TodoTextInput';
 import * as TodoActions from '../actions/TodoActions';
+import IsEditingMap from '../stores/is_editing_map.js'
 
 export default class TodoItem extends Component {
   static propTypes = {
@@ -11,13 +12,21 @@ export default class TodoItem extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = {
-      editing: false
-    };
+  }
+
+  computations() {
+    return {
+      isEditingMap: IsEditingMap
+    }
+  }
+
+  data() {
+    return this.props.loggit.compute(this.computations());
   }
 
   handleDoubleClick() {
-    this.setState({ editing: true });
+    const {todo} = this.props;
+    this.props.loggit.recordFact(TodoActions.willEditTodo(todo.id));
   }
 
   handleMarkTodo() {
@@ -34,21 +43,24 @@ export default class TodoItem extends Component {
   }
 
   handleSave(id, text) {
-    const fact = (text.length === 0)
+    const finishedEditingFact = TodoActions.finishedEditingTodo(id);
+    this.props.loggit.recordFact(finishedEditingFact);
+
+    const mutationFact = (text.length === 0)
       ? TodoActions.deleteTodo(id)
       : TodoActions.editTodo(id, text);
-    this.props.loggit.recordFact(fact);
-    this.setState({ editing: false });
+    this.props.loggit.recordFact(mutationFact);
   }
 
   render() {
     const {todo} = this.props;
+    const isEditing = this.data().isEditingMap[todo.id];
 
     let element;
-    if (this.state.editing) {
+    if (isEditing) {
       element = (
         <TodoTextInput text={todo.text}
-                       editing={this.state.editing}
+                       editing={isEditing}
                        onSave={(text) => this.handleSave(todo.id, text)} />
       );
     } else {
@@ -70,7 +82,7 @@ export default class TodoItem extends Component {
     return (
       <li className={classnames({
         completed: todo.marked,
-        editing: this.state.editing
+        editing: isEditing
       })}>
         {element}
       </li>

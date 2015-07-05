@@ -2,21 +2,21 @@ import * as types from './ActionTypes';
 
 export function addTodo(text) {
   return {
-    type: types.ADD_TODO,
+    type: types.ADDED_TODO,
     text
   };
 }
 
 export function deleteTodo(id) {
   return {
-    type: types.DELETE_TODO,
+    type: types.DELETED_TODO,
     id
   };
 }
 
 export function editTodo(id, text) {
   return {
-    type: types.EDIT_TODO,
+    type: types.EDITED_TODO,
     id,
     text
   };
@@ -51,5 +51,19 @@ export function uncheckAll() {
 export function clearMarked() {
   return {
     type: types.CLEAR_MARKED
+  };
+}
+
+export function willEditTodo(todoId) {
+  return {
+    type: types.WILL_EDIT_TODO,
+    todoId: todoId
+  };
+}
+
+export function finishedEditingTodo(todoId) {
+  return {
+    type: types.FINISHED_EDITING_TODO,
+    todoId: todoId
   };
 }

@@ -1,7 +1,8 @@
 import React from 'react';
-import LoggitShell from './lib/loggit_shell';
+import LoggitShell from './loggit/shell';
 import 'todomvc-app-css/index.css';
 
+// Entry point
 const el = document.getElementById('root');
-const loggitShell = new LoggitShell();
-loggitShell.start(el);
+const loggitShell = new LoggitShell(el);
+loggitShell.start();

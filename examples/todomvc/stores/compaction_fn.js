@@ -1,7 +1,7 @@
 import {
-  ADD_TODO,
-  DELETE_TODO,
-  EDIT_TODO,
+  ADDED_TODO,
+  DELETED_TODO,
+  EDITED_TODO,
   CHECK_TODO,
   UNCHECK_TODO,
   CHECK_ALL,
@@ -9,19 +9,20 @@ import {
   CLEAR_MARKED
 } from '../actions/ActionTypes';
 
+
 // This maps facts -> compaction key.  It's semantics are coupled
 // to what facts mean and how they are used in the app.  This isn't
-// library code.
+// library code and is tricky to tune.
 export default function compactionKey(action) {
   switch (action.type) {
-  case ADD_TODO:
-    return [ADD_TODO, action.text];
+  case ADDED_TODO:
+    return [ADDED_TODO, action.text];
 
-  case DELETE_TODO:
-    return [DELETE_TODO, action.id];
+  case DELETED_TODO:
+    return [DELETED_TODO, action.id];
 
-  case EDIT_TODO:
-    return [EDIT_TODO, action.id];
+  case EDITED_TODO:
+    return [EDITED_TODO, action.id];
 
   case UNCHECK_TODO:
     return [UNCHECK_TODO, action.id];
