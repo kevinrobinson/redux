@@ -3,7 +3,7 @@ export default class Timer {
   constructor(timerName, options = {}) {
     this.timerName = timerName;
     this.options = options;
-    this.totalTime = 0;
+    this.reset();
   }
 
   time(fn) {
@@ -12,8 +12,14 @@ export default class Timer {
     const after = window.performance.now();
     const elapsedTime = after - before;
     this.totalTime = this.totalTime + elapsedTime;
+    this.calls++;
     this.logMsg(this.timerName, 'elapsedTime:', elapsedTime, 'totalTime:', this.totalTime);
     return returnValue;
+  }
+
+  reset() {
+    this.calls = 0;
+    this.totalTime = 0;
   }
 
   logMsg(...params) {

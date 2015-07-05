@@ -5,13 +5,27 @@ export default class ProfilingReporter {
   }
 
   printStats() {
-    const calls = (loggitShell.optimizer._hitCount + loggitShell.optimizer._missCount);
-    const percentHits = Math.round(100 * loggitShell.optimizer._hitCount / calls);
+    const {renderer, optimizer} = loggitShell;
+    const optimizerPercentHits = Math.round(100 * optimizer._hitCount / optimizer.timer.calls);
     return [
-      isNaN(percentHits) ? 0 : percentHits,
-      isNaN(calls) ? 0 : calls,
-      Math.round(loggitShell.optimizer.timer.totalTime),
-      loggitShell.optimizer
+      'r:',
+      Math.round(renderer.timer.totalTime),
+      renderer.timer.calls,
+      this.timePerCall(renderer.timer),
+      'c:',
+      Math.round(optimizer.timer.totalTime),
+      optimizer.timer.calls,
+      this.timePerCall(optimizer.timer),
+      // 'c+:',
+      // isNaN(optimizerPercentHits) ? 0 : optimizerPercentHits,
+      // optimizer.timer.calls,
+      '|',
+      optimizer,
+      renderer
     ];
+  }
+
+  timePerCall(timer) {
+    return parseFloat((timer.totalTime / timer.calls).toFixed(4));
   }
 }

@@ -10,7 +10,7 @@ export default class RafReactRenderer {
     this.loggit = loggit;
     this._loop = this._loop.bind(this);
 
-    this.timer = new Timer('NaiveReactRenderer.render', {
+    this.timer = new Timer('RafReactRenderer.render', {
       logFn: this.logMsg.bind(this)
     });
   }

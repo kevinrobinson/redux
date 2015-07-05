@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import ReactInterpreter from '../react_interpreter'
+import Timer from '../timer';
 
 
 // This batches with RAF, but also precomputes values for `compute`
@@ -21,6 +22,10 @@ export default class PrecomputeReactRenderer {
     this._loop = this._loop.bind(this);
     this._lastCompute = {};
     this._rootComponent = null;    
+
+    this.timer = new Timer('PrecomputeReactRenderer.render', {
+      logFn: this.logMsg.bind(this)
+    });
   }
 
   logMsg(...params) {
@@ -30,7 +35,6 @@ export default class PrecomputeReactRenderer {
   start() {
     this._wasDestroyed = false;
     this._isDirty = true;
-    this._renderCount = 0;
     this._loop();
   }
 
@@ -47,8 +51,9 @@ export default class PrecomputeReactRenderer {
   _loop() {
     if (this._wasDestroyed) return;
     if (this._isDirty) {
-      this._renderCount++;
-      this._render();
+      this.timer.time(() => {
+        this._render();
+      });
       this._isDirty = false;
     }
 
@@ -68,7 +73,7 @@ export default class PrecomputeReactRenderer {
   // render as we need to when a copmutedValue has changed, only in order to
   // discover lower branches of the tree.
   _render() {
-    this.logMsg('PrecomputeReactRenderer#render', this._renderCount);
+    this.logMsg('PrecomputeReactRenderer#render');
     if (!this._rootComponent) {
       return this._initialRender();
     }
