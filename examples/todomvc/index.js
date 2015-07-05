@@ -6,3 +6,6 @@ import 'todomvc-app-css/index.css';
 const el = document.getElementById('root');
 const loggitShell = new LoggitShell(el);
 loggitShell.start();
+
+// For debugging
+window.loggitShell = loggitShell;

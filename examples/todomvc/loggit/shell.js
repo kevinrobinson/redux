@@ -1,5 +1,6 @@
 import Log from './log';
-import Optimizer from './optimizer';
+import NoopOptimizer from './noop_optimizer';
+import MemoizingOptimizer from './memoizing_optimizer';
 import NaiveReactRenderer from './naive_react_renderer';
 import RafReactRenderer from './raf_react_renderer';
 import Compactor from './compactor';
@@ -11,7 +12,7 @@ export default class Shell {
   constructor(el) {
     this.el = el;
     this.log = new Log({ onFact: this._onFact.bind(this) });
-    this.optimizer = new Optimizer(this.log);
+    this.optimizer = new MemoizingOptimizer(this.log);
     this.loggit = this._createLoggitApi(this.log, this.optimizer);    
     this.renderer = new RafReactRenderer(this.el, this.loggit);
   }
