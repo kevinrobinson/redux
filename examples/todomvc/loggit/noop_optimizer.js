@@ -1,4 +1,4 @@
-// Just a placeholder
+// Just a placeholder with profiling, does no actual optimizations.
 export default class NoopOptimizer {
   constructor(log, options = {}) {
     this.log = log;

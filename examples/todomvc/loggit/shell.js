@@ -19,7 +19,7 @@ export default class Shell {
       onFact: this._onFact.bind(this),
       initialFacts: options.initialFacts || []
     });
-    this.optimizer = new NoopOptimizer(this.log);
+    this.optimizer = new MemoizingSnapshotOptimizer(this.log);
     this.loggit = this._createLoggitApi(this.log, this.optimizer);    
     this.renderer = new RafReactRenderer(this.el, this.loggit);
   }

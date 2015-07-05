@@ -1,5 +1,7 @@
 // Maintains a cache of calls, for repeats calls to the same fn
 // with the same set of facts.
+// This is attempting to optimize the way the cache actual works but doesn't
+// change the semantics.
 export default class MemoizingOptimizerV2 {
   constructor(log, options = {}) {
     this.log = log;

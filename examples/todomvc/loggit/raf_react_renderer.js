@@ -2,7 +2,7 @@ import React from 'react';
 import TodoApp from '../components/TodoApp';
 
 
-// Batches with RAF
+// Batches with RAF, no shouldComponentUpdate optimizations.
 export default class RafReactRenderer {
   constructor(el, loggit) {
     this.el = el;
