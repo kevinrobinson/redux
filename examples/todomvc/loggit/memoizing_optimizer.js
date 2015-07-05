@@ -1,18 +1,5 @@
 // Maintains a cache of calls, for repeats calls to the same fn
 // with the same set of facts.
-//
-// Methodology is hard reload, then check 'time in compute' for each optimizer
-// on the console.  The data set is randomly generated though, so it's not
-// a repeatable test, just ballpark.
-//
-// v1
-// Quick and dirty profiling looks like this is a bit faster on the 3sec monkey
-// test, from about ~950ms to ~750ms.  Logging looks like it's enough to affect
-// performance here too.  Removing all logging means this is faster, from about
-// ~1000ms to ~630ms.
-//
-// v2
-// ?
 export default class MemoizingOptimizer {
   constructor(log, options = {}) {
     this.log = log;
