@@ -1,6 +1,8 @@
 import Log from './log';
 import NoopOptimizer from './noop_optimizer';
 import MemoizingOptimizer from './memoizing_optimizer';
+import MemoizingOptimizerV2 from './memoizing_optimizer_v2';
+import MemoizingSnapshotOptimizer from './memoizing_snapshot_optimizer';
 import NaiveReactRenderer from './naive_react_renderer';
 import RafReactRenderer from './raf_react_renderer';
 import Compactor from './compactor';
@@ -9,10 +11,15 @@ import compactionFn from '../stores/compaction_fn'
 
 // Outermost layer
 export default class Shell {
-  constructor(el) {
+  constructor(el, options = {}) {
     this.el = el;
-    this.log = new Log({ onFact: this._onFact.bind(this) });
-    this.optimizer = new MemoizingOptimizer(this.log);
+    this.options = options;
+
+    this.log = new Log({
+      onFact: this._onFact.bind(this),
+      initialFacts: options.initialFacts || []
+    });
+    this.optimizer = new NoopOptimizer(this.log);
     this.loggit = this._createLoggitApi(this.log, this.optimizer);    
     this.renderer = new RafReactRenderer(this.el, this.loggit);
   }

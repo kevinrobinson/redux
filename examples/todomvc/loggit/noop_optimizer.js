@@ -7,7 +7,7 @@ export default class NoopOptimizer {
   }
 
   logMsg(...params) {
-    // this.logMsg(...params);
+    // console.log(...params);
   }
 
   compute(computations) {
@@ -26,6 +26,6 @@ export default class NoopOptimizer {
   reduce(log, computation) {
     this._calls++;
     this.logMsg('NoopOptimizer#reduce:', this._calls);
-    return log.reduce(computation);
+    return log.reduceComputation(computation);
   }
 }

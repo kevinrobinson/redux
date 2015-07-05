@@ -38,6 +38,7 @@ export default class Debugger extends React.Component {
       { heap: after.heap },
       { heap: '+' + (after.heap - before.heap) }
     ]);
+    console.info(window.optimizerStats());
   }
 
   handleMonkey() {

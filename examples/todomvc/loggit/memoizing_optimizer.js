@@ -1,16 +1,18 @@
 // Maintains a cache of calls, for repeats calls to the same fn
 // with the same set of facts.
-// TODO(kr) the data structure here isn't very good, and this doesn't actually
-// bound the size of the cache, just the number of computations that can be stored.
 //
+// Methodology is hard reload, then check 'time in compute' for each optimizer
+// on the console.  The data set is randomly generated though, so it's not
+// a repeatable test, just ballpark.
+//
+// v1
 // Quick and dirty profiling looks like this is a bit faster on the 3sec monkey
 // test, from about ~950ms to ~750ms.  Logging looks like it's enough to affect
 // performance here too.  Removing all logging means this is faster, from about
 // ~1000ms to ~630ms.
 //
-// Methodology is hard reload, then check 'time in compute' for each optimizer
-// on the console.  The data set is randomly generated though, so it's not
-// a repeatable test, just ballpark.
+// v2
+// ?
 export default class MemoizingOptimizer {
   constructor(log, options = {}) {
     this.log = log;
@@ -29,7 +31,7 @@ export default class MemoizingOptimizer {
   }
 
   logMsg(...params) {
-    // this.logMsg(...params);
+    // console.log(...params);
   }
 
   compute(computations) {
@@ -66,7 +68,7 @@ export default class MemoizingOptimizer {
     // compute
     this._missCount++;
     this.logMsg('MemoizingOptimizer#miss:', this._missCount);
-    const computedValue = this.log.reduce(computation);
+    const computedValue = this.log.reduceComputation(computation);
 
     // write cache, existing computation
     if (computationIndex !== -1) {

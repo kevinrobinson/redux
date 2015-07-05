@@ -3,9 +3,9 @@ import _ from 'lodash';
 // Holds the log data
 export default class Log {
   constructor(options = {}) {
-    this.facts = [];
     this.options = options;
-    this.offset = 0;
+    this.facts = options.initialFacts || [];
+    this.offset = this.facts.length;
   }
 
   recordFact(fact) {
@@ -39,7 +39,7 @@ export default class Log {
   // reducer's optional argument and consumers have to handle the shape of the
   // data changing.
   // this keeps the shape of the data the same.
-  reduce(computation) {
+  reduceComputation(computation) {
     console.log('Log#reduce:', computation);
     return (this.facts.length === 0)
      ? computation.initial
