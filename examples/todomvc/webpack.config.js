@@ -5,7 +5,7 @@ module.exports = {
   devtool: 'eval',
   entry: [
     'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
+    // 'webpack/hot/only-dev-server',
     './index'
   ],
   output: {
@@ -14,7 +14,7 @@ module.exports = {
     publicPath: '/static/'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    // new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
   resolve: {
@@ -23,7 +23,8 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.js$/,
-      loaders: ['react-hot', 'babel'],
+      // loaders: ['react-hot', 'babel'],
+      loaders: ['babel'],
       exclude: /node_modules/
     }, {
       test: /\.css?$/,

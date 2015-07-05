@@ -23,7 +23,7 @@ export default class MainSection extends Component {
   }
 
   handleClearMarked() {
-    const { todos } = this.data();
+    const {todos} = this.data();
     const atLeastOneMarked = todos.some(todo => todo.marked);
     if (!atLeastOneMarked) return;
 
@@ -96,8 +96,8 @@ export default class MainSection extends Component {
         <Footer markedCount={markedCount}
                 unmarkedCount={unmarkedCount}
                 filter={filter}
-                onClearMarked={::this.handleClearMarked}
-                onShow={::this.handleShow} />
+                onClearMarked={this.handleClearMarked.bind(this)}
+                onShow={this.handleShow.bind(this)} />
       );
     }
   }

@@ -28,7 +28,7 @@ export default class Log {
 
   _persistStampedFact(stampedFact) {
     console.log('Log#_persistStampedFact', this.facts.length, stampedFact);
-    this.facts.push(stampedFact);
+    this.facts = this.facts.concat(stampedFact);
     if (this.options.onFact) {
       this.options.onFact(this);
     }

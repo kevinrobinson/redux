@@ -15,6 +15,31 @@ export default class Debugger extends React.Component {
     this.pokeMonkey = this.pokeMonkey.bind(this);
   }
 
+  // For easier profiling
+  componentDidMount() {
+    this.setState({ isMonkeyAwake: true });
+    const before = this.profileSnapshot();
+    window.setTimeout(() => {
+      this.setState({ isMonkeyAwake: false });
+      const after = this.profileSnapshot();
+      this.outputProfiling(before, after);
+    }, 3000);
+  }
+
+  profileSnapshot() {
+    return {
+      heap: window.performance.memory.usedJSHeapSize
+    };
+  }
+
+  outputProfiling(before, after) {
+    console.table([
+      { heap: before.heap },
+      { heap: after.heap },
+      { heap: '+' + (after.heap - before.heap) }
+    ]);
+  }
+
   handleMonkey() {
     this.setState({ isMonkeyAwake: !this.state.isMonkeyAwake });
   }
@@ -25,7 +50,7 @@ export default class Debugger extends React.Component {
     }
 
     if (this.state.isMonkeyAwake) {
-      this.MonkeyTimer = window.setInterval(this.pokeMonkey, 5);
+      this.MonkeyTimer = window.setInterval(this.pokeMonkey, 100);
     } else {
       window.clearInterval(this.MonkeyTimer);
     }

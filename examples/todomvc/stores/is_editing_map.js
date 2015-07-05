@@ -8,7 +8,6 @@ import {
 export default {
   initial: {},
   reducer: function(isEditingMap, action) {
-    debugger;
     switch (action.type) {
     case WILL_EDIT_TODO:
       return {...isEditingMap, [action.todoId]: true};
