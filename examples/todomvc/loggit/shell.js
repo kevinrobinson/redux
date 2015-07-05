@@ -1,6 +1,7 @@
 import Log from './log';
 import Optimizer from './optimizer';
 import NaiveReactRenderer from './naive_react_renderer';
+import RafReactRenderer from './raf_react_renderer';
 import Compactor from './compactor';
 import compactionFn from '../stores/compaction_fn'
 
@@ -12,11 +13,12 @@ export default class Shell {
     this.log = new Log({ onFact: this._onFact.bind(this) });
     this.optimizer = new Optimizer(this.log);
     this.loggit = this._createLoggitApi(this.log, this.optimizer);    
-    this.renderer = new NaiveReactRenderer(this.el, this.loggit);
+    this.renderer = new RafReactRenderer(this.el, this.loggit);
   }
 
   // public
   start() {
+    this.renderer.start();
     this._notifyRenderer();
     return undefined;
   }
@@ -48,7 +50,7 @@ export default class Shell {
   // It can decide whether to respond synchronously, or to 
   // batch, etc.
   _notifyRenderer() {
-    this.renderer.render();
+    this.renderer.notify();
   }
 
   // Just hacking to see the effects here

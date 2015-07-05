@@ -8,21 +8,28 @@ export default class NaiveReactRenderer {
   constructor(el, loggit) {
     this.el = el;
     this.loggit = loggit;
+    this._renderCount = 0;
   }
 
+  start() {
+    return undefined;
+  }
 
-  //public
-  render() {
-    console.log('NaiveReactRenderer#render');
+  destroy() {
+    return undefined;
+  }
+
+  notify() {
+    this._render();
+  }
+
+  _render() {
+    this._renderCount++;
+    console.log('NaiveReactRenderer#render', this._renderCount);
     React.render(
       <TodoApp loggit={this.loggit} />,
       this.el
     );
-    return undefined;
-  }
-
-  //public 
-  destroy() {
     return undefined;
   }
 }

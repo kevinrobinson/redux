@@ -50,7 +50,7 @@ export default class Debugger extends React.Component {
     }
 
     if (this.state.isMonkeyAwake) {
-      this.MonkeyTimer = window.setInterval(this.pokeMonkey, 100);
+      this.MonkeyTimer = window.setInterval(this.pokeMonkey, 10);
     } else {
       window.clearInterval(this.MonkeyTimer);
     }
