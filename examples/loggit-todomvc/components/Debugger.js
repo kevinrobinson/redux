@@ -17,6 +17,10 @@ export default class Debugger extends React.Component {
 
   // For easier profiling
   componentDidMount() {
+    window.setTimeout(() => this.startMonkeying(), 4000);
+  }
+
+  startMonkeying() {
     this.setState({ isMonkeyAwake: true });
     const before = this.profileSnapshot();
     window.setTimeout(() => {

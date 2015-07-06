@@ -6,11 +6,17 @@ import Timer from '../timer';
 
 // This batches with RAF, but also precomputes values for `compute`
 // before calling `render` in the next animation frame.
-// This way we can split the computation to another thread, and guaranteed its
-// all been memoized before synchronously calling render.
+// This way we can split the computation step from rendering, and more computation
+// that render will need will have been memoized before synchronously
+// calling render.
+//
 // The idea is we write the computation we want performed in components, then
 // that can be precomputed before render, so that the hot path in render can stay
 // synchronous and fast.
+//
+// This doesn't work when render has branching we can't look inside, but that
+// should be isolated to that part of the component tree, and other
+// compute optimizations should help there.
 export default class PrecomputeReactRenderer {
   constructor(reactClass, el, loggit, options = {}) {
     this.reactClass = reactClass;

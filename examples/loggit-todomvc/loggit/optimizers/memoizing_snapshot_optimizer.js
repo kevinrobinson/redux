@@ -1,14 +1,14 @@
 import Timer from '../timer';
 
-// Maintains a cache of calls, for repeats calls to the same fn
+// Maintains a cache memoizing calls, for repeats calls to the same fn
 // with the same set of facts.
 //
-// Profiling methodology is to do a hard reload, then check 'time in compute'
-// for each optimizer on the console.  The data set is randomly generated though, so
-// it's not a repeatable test, just ballpark.  Logging seems to affect these
-// numbers quite a bit, so there's a test that removes them.
-//
-
+// Also maintains a cache of snapshots, saving previously computed values,
+// so that when new facts come in we can avoid a full re-reduce over the entire
+// log and work from the snapshot.
+// 
+// no real work here to bound these caches, just focused on getting a
+// rough sense of their effect
 const VALUE_NOT_FOUND = '@@loggit:VALUE_NOT_FOUND:loggit@@';
 
 export default class MemoizingSnapshotOptimizer {

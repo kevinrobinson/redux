@@ -18,11 +18,15 @@ initialFactsSet1.forEach((action) => {
 
 export default class App {
   componentDidMount() {
+    window.setTimeout(() => this.startMonkeying(), 4000);
+  }
+
+  startMonkeying() {
     this.MonkeyTimer = window.setInterval(this.pokeMonkey, 10);
     window.setTimeout(() => {
       window.clearInterval(this.MonkeyTimer);
       console.info(window.redux.getProfilingReporter().printStats());
-    }, 3000);
+    }, 30000);
   }
 
   pokeMonkey() {
